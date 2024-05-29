@@ -401,9 +401,9 @@ String TenBan;
             return;
 
         }if(btngoi.getText().equals("Thanh toán")){
-//            DLThanhToan thanhtoan = new DLThanhToan(Run.QlCafe, true, tongtien, TenBan, MaBan, MaHD);//tongtien trang thai ban ten ban
-//            thanhtoan.setVisible(true);
-//            return;
+            DLThanhToan thanhtoan = new DLThanhToan( true, tongtien, TenBan, MaBan, MaHD);//tongtien trang thai ban ten ban
+            thanhtoan.setVisible(true);
+            return;
 }
         if(btngoi.getText().equals("Gọi món")){
             jpthucdon.setVisible(true);

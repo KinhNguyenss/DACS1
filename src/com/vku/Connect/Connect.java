@@ -7,6 +7,7 @@ import com.vku.Model.DsOrder;
 import com.vku.Model.HoaDon;
 import com.vku.Model.Loai;
 import com.vku.Model.ThucDon;
+import com.vku.Model.taiKhoan;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -277,4 +278,133 @@ public class Connect {
         }
         return insert;
     }
+         public int ThanhToan(HoaDon hd){
+        int update = 0;
+        String sql = "UPDATE hoadon SET TongTien = '"+hd.GetTongTien()+"', TrangThai = 1 WHERE MaHoaDon = '"+hd.GetMaHD()+"'";
+        try{
+            Statement st = cn.createStatement();
+            update = st.executeUpdate(sql);
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Thanh toán không thành công !");
+        }
+        return update;        
+    }
+             public ArrayList<taiKhoan> GetTaiKhoan(){
+        ArrayList<taiKhoan> arrtd = null;
+        String sql;
+            sql = "SELECT * FROM taikhoan WHERE lv != 1";
+        try{
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            arrtd = new ArrayList<taiKhoan>();
+            while(rs.next()){
+                taiKhoan td = new taiKhoan(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4));
+                arrtd.add(td);
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "lỗi !");
+        }
+        return arrtd;
+    }
+             public ArrayList<HoaDon> GetDSHD(){
+        ArrayList<HoaDon> arrDs = null;
+        String sql;
+            sql = "Select * From hoadon Where TrangThai = 1";
+        try{
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            arrDs = new ArrayList<HoaDon>();
+            while(rs.next()){
+                HoaDon order = new HoaDon(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getTimestamp(4), rs.getInt(5), rs.getInt(6));
+                arrDs.add(order);
+            }
+        }catch(SQLException ex){
+        }
+        return arrDs;        
+    }
+             public ArrayList<ThucDon> GetChiTietMonByMa(){
+        ArrayList<ThucDon> arrDs = null;
+        String sql;
+            sql = "SELECT TenMon, MaMon, DVT FROM thucdon where MaMon in (Select MaMon From chitiethd)";
+        try{
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            arrDs = new ArrayList<ThucDon>();
+            while(rs.next()){
+                ThucDon order = new ThucDon();
+                order.SetTenMon(rs.getString(1));
+                order.SetMaMon(rs.getString(2));
+                order.SetDVT(rs.getString(3));
+                arrDs.add(order);
+            }
+        }catch(SQLException ex){
+        }
+        return arrDs;        
+    }  
+             public ArrayList<DsOrder> GetGiaSoLuong(String ma){
+        ArrayList<DsOrder> arrDs = null;
+        String sql;
+            sql = "Select Gia, SoLuong, TenMon, DVT From chitiethd AS ct INNER JOIN hoadon AS hd ON ct.MaHoaDon = hd.MaHoaDon INNER JOIN thucdon AS td ON td.MaMon = ct.MaMon Where hd.TrangThai = 1 AND ct.MaMon = '"+ma+"'";
+        try{
+            
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            arrDs = new ArrayList<DsOrder>();
+            while(rs.next()){
+                
+                DsOrder order = new DsOrder();
+                order.SetGia(rs.getInt(1));
+                order.SetSoLuong(rs.getInt(2));
+                order.SetTenMon(rs.getString(3));
+                order.SetDVT(rs.getString(4));
+                arrDs.add(order);
+            }
+        }catch(SQLException ex){
+        }
+        return arrDs;        
+    }
+             public ArrayList<DsOrder> GetHdByDate(String d1,String d2, String m){
+        ArrayList<DsOrder> arrDs = null;
+        String sql;
+        if(d1.equals(d2)){
+            sql = "Select Gia, SoLuong, TenMon, DVT From chitiethd AS ct INNER JOIN hoadon AS hd ON ct.MaHoaDon = hd.MaHoaDon INNER JOIN thucdon AS td ON td.MaMon = ct.MaMon Where hd.TrangThai = 1 AND hd.GioDen >= '"+d1+"' AND ct.MaMon ='"+m+"'";
+        }else
+            sql = "Select Gia, SoLuong, TenMon, DVT From chitiethd AS ct INNER JOIN hoadon AS hd ON ct.MaHoaDon = hd.MaHoaDon INNER JOIN thucdon AS td ON td.MaMon = ct.MaMon Where hd.TrangThai = 1 AND hd.GioDen BETWEEN '"+d1+"' AND '"+d2+"' AND ct.MaMon ='"+m+"'";
+        try{
+            
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            arrDs = new ArrayList<DsOrder>();
+            while(rs.next()){
+                DsOrder order = new DsOrder();
+                order.SetGia(rs.getInt(1));
+                order.SetSoLuong(rs.getInt(2));
+                order.SetTenMon(rs.getString(3));
+                order.SetDVT(rs.getString(4));
+                arrDs.add(order);
+            }
+        }catch(SQLException ex){
+        }
+        return arrDs;        
+    } 
+             public ArrayList<DsOrder> GetCtHDByDate(int ma, String d1, String d2){
+        ArrayList<DsOrder> arrDs = null;
+        String sql;
+        if(d1.equals(d2))
+            sql = "Select ct.MaMon, TenMon, DVT, SoLuong, Gia, ct.MaHoaDon From chitiethd AS ct INNER JOIN thucdon AS td ON ct.MaMon = td.MaMon INNER JOIN hoadon AS hd ON hd.MaHoaDon = ct.MaHoaDon Where ct.MaHoaDon = '"+ma+"' AND hd.GioDen >= '"+d1+"'";
+            else
+            sql = "Select ct.MaMon, TenMon, DVT, SoLuong, Gia, ct.MaHoaDon From chitiethd AS ct INNER JOIN thucdon AS td ON ct.MaMon = td.MaMon INNER JOIN hoadon AS hd ON hd.MaHoaDon = ct.MaHoaDon Where ct.MaHoaDon = '"+ma+"' AND hd.GioDen BETWEEN '"+d1+"' AND '"+d2+"'";
+        try{
+            Statement st = cn.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            arrDs = new ArrayList<DsOrder>();
+            while(rs.next()){
+                DsOrder order = new DsOrder(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getInt(5), rs.getInt(6));
+                arrDs.add(order);
+            }
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Không lấy được danh sách chi tiết hoa đơn !"+ex.toString());
+        }
+        return arrDs;        
+    } 
 }

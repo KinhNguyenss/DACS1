@@ -76,6 +76,7 @@ public class nhanVien extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
         closeLabel = new javax.swing.JLabel();
+        thongKeBtn = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         menuLabel = new javax.swing.JLabel();
         bGPanel = new javax.swing.JPanel();
@@ -121,6 +122,16 @@ public class nhanVien extends javax.swing.JFrame {
             }
         });
 
+        thongKeBtn.setBackground(new java.awt.Color(255, 255, 255));
+        thongKeBtn.setFont(new java.awt.Font("Bahnschrift", 0, 24)); // NOI18N
+        thongKeBtn.setForeground(new java.awt.Color(255, 255, 255));
+        thongKeBtn.setText("     THỐNG KÊ");
+        thongKeBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                thongKeBtnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout menuPanelLayout = new javax.swing.GroupLayout(menuPanel);
         menuPanel.setLayout(menuPanelLayout);
         menuPanelLayout.setHorizontalGroup(
@@ -140,7 +151,8 @@ public class nhanVien extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(menuPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator2)
-                            .addComponent(jSeparator3))))
+                            .addComponent(jSeparator3)))
+                    .addComponent(thongKeBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         menuPanelLayout.setVerticalGroup(
@@ -162,11 +174,13 @@ public class nhanVien extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(thongKeBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 23, Short.MAX_VALUE))
         );
 
-        getContentPane().add(menuPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, 710));
+        getContentPane().add(menuPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 200, 710));
 
         jPanel2.setBackground(new java.awt.Color(167, 122, 93));
 
@@ -218,6 +232,10 @@ public class nhanVien extends javax.swing.JFrame {
         dongMenu();
     }//GEN-LAST:event_trangChuLabelMouseClicked
 
+    private void thongKeBtnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_thongKeBtnMouseClicked
+        taiTrang(2);
+    }//GEN-LAST:event_thongKeBtnMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -264,10 +282,12 @@ public class nhanVien extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel menuLabel;
     private javax.swing.JPanel menuPanel;
+    private javax.swing.JLabel thongKeBtn;
     private javax.swing.JLabel trangChuLabel;
     // End of variables declaration//GEN-END:variables
     trangChuPanel tC;
     banHangPanel bH;
+    JpThongKe tk;
     MP3 mp3;
     int width = 200;
     int height = 950;
@@ -291,6 +311,13 @@ public class nhanVien extends javax.swing.JFrame {
                 mp3.play();
                 bGPanel.add(bH);
                 break;
+            case 2:
+                if (tk == null) {
+                    tk = new JpThongKe();
+                }
+                 mp3 = new MP3 ("D:\\Workspace\\Java\\DACS1\\src\\com\\vku\\Sound\\🎵Sparkle - Kimi no Nawa (君の名は) OST l 4hands piano.mp3");
+                mp3.play();
+                bGPanel.add(tk);
             default:
         }
 
